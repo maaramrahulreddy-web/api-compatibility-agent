@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>API Sentinel | Compatibility Agent</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #0b1020;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .app {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: #11182d;
+            border-right: 1px solid #26304d;
+            padding: 24px 16px;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 35px;
+        }
+
+        .logo span {
+            color: #6ea8fe;
+        }
+
+        .nav-item {
+            padding: 12px 14px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            color: #aab4d0;
+            cursor: pointer;
+        }
+
+        .nav-item.active,
+        .nav-item:hover {
+            background: #1d2947;
+            color: #ffffff;
+        }
+
+        .main {
+            flex: 1;
+            padding: 30px;
+            max-width: 1400px;
+            margin: auto;
+            width: 100%;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .title {
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #8d98b5;
+            margin-top: 7px;
+        }
+
+        .status {
+            background: #132d25;
+            color: #55d6a0;
+            padding: 9px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        .card {
+            background: #11182d;
+            border: 1px solid #26304d;
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 22px;
+        }
+
+        .card h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: #8d98b5;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 130px;
+            margin-top: 18px;
+            padding: 16px;
+            background: #0b1020;
+            border: 1px solid #303b5c;
+            border-radius: 10px;
+            color: #ffffff;
+            resize: vertical;
+            font-size: 15px;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: #6ea8fe;
+        }
+
+        .button {
+            margin-top: 15px;
+            padding: 12px 22px;
+            border: none;
+            border-radius: 8px;
+            background: #4f8cff;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background: #3d7bea;
+        }
+
+        .button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .results {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+
+        .result-card {
+            background: #11182d;
+            border: 1px solid #26304d;
+            border-radius: 14px;
+            padding: 24px;
+        }
+
+        .result-label {
+            color: #8d98b5;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .result-value {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .analysis {
+            white-space: pre-wrap;
+            line-height: 1.7;
+            color: #d6dcf0;
+            margin-top: 15px;
+        }
+
+        .memory-box {
+            border-left: 3px solid #6ea8fe;
+            padding-left: 15px;
+            margin-top: 15px;
+            color: #c5cee5;
+        }
+
+        .loading {
+            display: none;
+            margin-top: 15px;
+            color: #8d98b5;
+        }
+
+        .error {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            background: #351b23;
+            color: #ff8fa3;
+        }
+
+        @media (max-width: 850px) {
+            .sidebar {
+                width: 190px;
+            }
+
+            .results {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .app {
+                display: block;
+            }
+
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #26304d;
+            }
+
+            .main {
+                padding: 18px;
+            }
+
+            .topbar {
+                align-items: flex-start;
+                gap: 15px;
+                flex-direction: column;
+            }
+
+            .title {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <aside class="sidebar">
+        <div class="logo">
+            API <span>Sentinel</span>
+        </div>
+
+        <div class="nav-item active">Dashboard</div>
+        <div class="nav-item">APIs</div>
+        <div class="nav-item">Dependencies</div>
+        <div class="nav-item">Hindsight Memory</div>
+        <div class="nav-item">Analysis History</div>
+    </aside>
+
+    <main class="main">
+
+        <div class="topbar">
+            <div>
+                <div class="title">API Compatibility Agent</div>
+                <div class="subtitle">
+                    Detect breaking API changes using persistent agent memory.
+                </div>
+            </div>
+
+            <div class="status">
+                ● Agent Online
+            </div>
+        </div>
+
+        <section class="card">
+
+            <h2>Analyze API Change</h2>
+
+            <p>
+                Describe a proposed API change and let the agent check
+                historical consumer dependencies.
+            </p>
+
+            <textarea
+                id="changeInput"
+                placeholder="Example: Remove email from Customer API v1"
+            ></textarea>
+
+            <button
+                class="button"
+                id="analyzeButton"
+                onclick="analyzeChange()">
+                Analyze Compatibility
+            </button>
+
+            <div class="loading" id="loading">
+                Analyzing with Hindsight memory and AI...
+            </div>
+
+            <div class="error" id="error"></div>
+
+        </section>
+
+        <section class="results">
+
+            <div class="result-card">
+                <div class="result-label">
+                    Compatibility Status
+                </div>
+
+                <div
+                    class="result-value"
+                    id="status">
+                    —
+                </div>
+            </div>
+
+            <div class="result-card">
+                <div class="result-label">
+                    Memory Source
+                </div>
+
+                <div class="result-value">
+                    Hindsight
+                </div>
+            </div>
+
+        </section>
+
+        <section class="card">
+
+            <h2>AI Compatibility Analysis</h2>
+
+            <div
+                class="analysis"
+                id="analysis">
+                Run an analysis to see the agent's reasoning.
+            </div>
+
+        </section>
+
+        <section class="card">
+
+            <h2>Hindsight Memory</h2>
+
+            <div class="memory-box">
+                The agent recalls historical API consumer dependencies
+                before making its compatibility assessment.
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script>
+
+async function analyzeChange() {
+
+    const changeInput = document.getElementById("changeInput");
+    const button = document.getElementById("analyzeButton");
+    const loading = document.getElementById("loading");
+    const error = document.getElementById("error");
+
+    const status = document.getElementById("status");
+    const analysis = document.getElementById("analysis");
+
+    const change = changeInput.value.trim();
+
+    error.style.display = "none";
+
+    if (!change) {
+        error.textContent = "Please describe an API change.";
+        error.style.display = "block";
+        return;
+    }
+
+    button.disabled = true;
+    loading.style.display = "block";
+
+    status.textContent = "Analyzing...";
+    analysis.textContent = "";
+
+    try {
+
+        const response = await fetch("/api/ai/analyze", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                change: change
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error("Analysis request failed.");
+        }
+
+        const data = await response.json();
+
+        status.textContent = data.status || "UNKNOWN";
+        analysis.textContent = data.reason || "No analysis available.";
+
+    } catch (err) {
+
+        error.textContent =
+            "Unable to analyze the API change. Make sure the backend is running.";
+
+        error.style.display = "block";
+
+        status.textContent = "ERROR";
+
+    } finally {
+
+        button.disabled = false;
+        loading.style.display = "none";
+    }
+}
+
+</script>
+
+</body>
+</html>
